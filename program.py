@@ -5,6 +5,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import urllib.request
 import io
+import platform
 
 if platform.system() == "Windows":
     # Create a custom tkinter window
