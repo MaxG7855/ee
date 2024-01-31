@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 import os
 import subprocess
 
-code = 'https://raw.githubusercontent.com/CherryRadio/Utility-GUI/main/main.py'
+code = 'https://raw.githubusercontent.com/MaxG7855/ee/main/program.py'
 
 response = urllib.request.urlopen(code)
 data = response.read()
