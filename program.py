@@ -52,6 +52,8 @@ def import_minecraft_instance(instance_name):
 instance_name = "http://maxwellg.pro:25599/MSMP.zip"
 
 def import_btn():
+    if os.path.exists(path + 'instances\\MSMP'):
+        shutil.rmtree(path + 'instances\\MSMP')
     import_minecraft_instance(instance_name)
 def launch():
     subprocess.run([file_path, "--launch", "MSMP"], check=True)
