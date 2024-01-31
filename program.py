@@ -66,7 +66,7 @@ blank3.grid(column=1, row=11)
 blank4.grid(column=2, row=7)
 blank5.grid(column=2, row=9)
 
-button1 = customtkinter.CTkButton(window, text="Import Instance", command=import_btn)
+button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn)
 button1.grid(column=3, row=10)
 button2 = customtkinter.CTkButton(window, text="Launch Instance", command=launch)
 button2.grid(column=3, row=11)
