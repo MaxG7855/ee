@@ -27,7 +27,8 @@ def find_file_in_all_drives(filename):
 
 filename = "prismlauncher.exe"
 file_path = find_file_in_all_drives(filename)
-print(file_path - filename)
+path = file_pathe.replace(filename, '', 1)
+
 if file_path:
     print(f"File '{filename}' found at: {file_path}")
 else:
