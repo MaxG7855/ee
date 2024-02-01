@@ -61,8 +61,9 @@ if platform.system() == "Windows":
     def import_btn():
         if os.path.exists(path + 'instances\\MSMP'):
             shutil.rmtree(path + 'instances\\MSMP')
-        import_minecraft_instance(instance_name)
-
+            import_minecraft_instance(instance_name)
+        else:
+            import_minecraft_instance(instance_name)
     def launch():
         subprocess.run([file_path, "--launch", "MSMP"], check=True)
 
