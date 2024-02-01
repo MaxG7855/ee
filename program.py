@@ -6,17 +6,21 @@ from PIL import Image, ImageTk
 import urllib.request
 import io
 import platform
+import shutil
+import threading  # Import the threading module
 
 if platform.system() == "Windows":
-    # Create a custom tkinter window
     window = customtkinter.CTk()
     window.title("MSMP")
     window.geometry("280x174")
     window.resizable(0, 0)
 
-    photo = Image.open(io.BytesIO(urllib.request.urlopen('https://raw.githubusercontent.com/MaxG7855/ee/main/MSMP-Large.png').read()))
- 
-    image = ImageTk.PhotoImage(photo)
+    def download_image():
+        photo = Image.open(io.BytesIO(urllib.request.urlopen('https://raw.githubusercontent.com/MaxG7855/ee/main/MSMP-Large.png').read()))
+        return ImageTk.PhotoImage(photo)
+
+    # Load the image asynchronously
+    image = download_image()
 
     def find_file_in_all_drives(filename):
         drives = [chr(x) + ":\\" for x in range(65, 91)]
@@ -59,19 +63,9 @@ if platform.system() == "Windows":
             import_minecraft_instance(instance_name)
         else:
             import_minecraft_instance(instance_name)
+
     def launch():
         subprocess.run([file_path, "--launch", "MSMP"], check=True)
-
-    blank1 = customtkinter.CTkLabel(window, text=" ", height=3)
-    blank2 = customtkinter.CTkLabel(window, text=" ", height=3)
-    blank3 = customtkinter.CTkLabel(window, text=" ", height=3)
-    blank4 = customtkinter.CTkLabel(window, text=" ", height=3)
-    blank5 = customtkinter.CTkLabel(window, text=" ", height=3)
-    blank1.grid(column=1, row=10)
-    blank2.grid(column=1, row=10)
-    blank3.grid(column=1, row=11)
-    blank4.grid(column=2, row=7)
-    blank5.grid(column=2, row=9)
 
     button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn)
     button1.grid(column=3, row=10)
@@ -79,5 +73,5 @@ if platform.system() == "Windows":
     button2.grid(column=3, row=11)
     image_label = customtkinter.CTkLabel(window, text=" ", image=image)
     image_label.grid(column=3, row=9)
-    # Start the tkinter main loop
+
     window.mainloop()
