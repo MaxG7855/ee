@@ -59,9 +59,8 @@ if platform.system() == "Windows":
     instance_name = "http://maxwellg.pro:25599/MSMP.zip"
 
     def import_btn():
-        for directory in path:
-            if re.fullmatch('instances\\MSMP.*',directory):
-                shutil.rmtree(directory)
+        if os.path.exists(path + 'instances\\MSMP'):
+            shutil.rmtree(path + 'instances\\MSMP')
         import_minecraft_instance(instance_name)
 
     def launch():
