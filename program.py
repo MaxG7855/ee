@@ -56,7 +56,7 @@ if platform.system() == "Windows":
             print(f"Error: Failed to import Minecraft instance '{instance_name}' from PrismLauncher.")
             print(e)
 
-    instance_name = "http://maxwellg.pro:25599/MSMP.zip"
+    instance_name = "http://maxwellg.pro/MSMP.zip"
 
     def import_btn():
         if os.path.exists(path + 'instances\\MSMP'):
