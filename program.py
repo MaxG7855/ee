@@ -52,6 +52,11 @@ if platform.system() == "Windows":
         try:
             os.system(prism_launcher_path, "--import", instance_name)
             print(f"Successfully imported Minecraft instance '{instance_name}' from PrismLauncher.")
+            
+        except as e:
+            print(f"Error: Failed to import Minecraft instance '{instance_name}' from PrismLauncher.")
+            print(e)
+
         
     instance_name = "http://maxwellg.pro/MSMP.zip"
 
