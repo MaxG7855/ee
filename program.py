@@ -50,12 +50,9 @@ if platform.system() == "Windows":
             return
 
         try:
-            subprocess.run([prism_launcher_path, "--import", instance_name], check=True)
+            os.system(prism_launcher_path, "--import", instance_name)
             print(f"Successfully imported Minecraft instance '{instance_name}' from PrismLauncher.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error: Failed to import Minecraft instance '{instance_name}' from PrismLauncher.")
-            print(e)
-
+        
     instance_name = "http://maxwellg.pro/MSMP.zip"
 
     def import_btn():
@@ -65,7 +62,7 @@ if platform.system() == "Windows":
         else:
             import_minecraft_instance(instance_name)
     def launch():
-        subprocess.run([file_path, "--launch", "MSMP"], check=True)
+        os.system(file_path, "--launch", "MSMP")
 
     button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn)
     button1.grid(column=3, row=10)
