@@ -4,6 +4,8 @@ import customtkinter
 import tkinter as tk
 from PIL import Image, ImageTk
 import json
+import io
+
 
 window = tk.Tk()  # Create the main window
 window.title("MSMP")
