@@ -4,9 +4,9 @@ import customtkinter
 import tkinter as tk
 from PIL import Image, ImageTk
 import json
-import io
+import shutil
 import urllib.request
-
+import io
 
 window = tk.Tk()  # Create the main window
 window.title("MSMP")
@@ -62,7 +62,7 @@ def launch():
 def populate_accounts_dropdown():
     try:
         # Path to the accounts.json file
-        accounts_json_path = os.path.expanduser("~\\AppData\\PrismLauncher\\accounts.json")
+        accounts_json_path = os.path.expanduser("~\\AppData\\Roaming\\PrismLauncher\\accounts.json")
 
         # Check if Prism Launcher is installed in the default directory
         if not os.path.exists(accounts_json_path):
