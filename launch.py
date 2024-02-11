@@ -10,7 +10,7 @@ import platform
 import shutil
 import threading  # Import the threading module
 
-window.after(201, lambda :root.iconbitmap(''))
+window.after(201, lambda :root.iconbitmap('https://raw.githubusercontent.com/MaxG7855/ee/main/MSMP-Small.ico'))
 
 if platform.system() == "Windows":
     window = customtkinter.CTk()
