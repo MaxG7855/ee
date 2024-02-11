@@ -73,6 +73,9 @@ def populate_accounts_dropdown():
         with open(accounts_json_path, 'r') as f:
             accounts_data = json.load(f)
 
+        if not isinstance(accounts_data, list):
+            raise ValueError("Accounts data is not in the expected format.")
+
         # Extract account names from the JSON data
         account_names = [account["name"] for account in accounts_data]
 
@@ -86,6 +89,9 @@ def populate_accounts_dropdown():
         print("Error: accounts.json file not found.")
     except json.JSONDecodeError:
         print("Error: Unable to decode accounts.json file.")
+    except ValueError as e:
+        print(f"Error: {e}")
+
 
 # Create a dropdown list to select the account
 accounts_dropdown = tk.StringVar(window)
