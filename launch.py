@@ -50,7 +50,7 @@ if platform.system() == "Windows":
             return
 
         
-        os.system(prism_launcher_path, "--import", instance_name)
+        os.system(prism_launcher_path + " --import " + instance_name)
         print(f"Successfully imported Minecraft instance '{instance_name}' from PrismLauncher.")
 
         
@@ -63,7 +63,7 @@ if platform.system() == "Windows":
         else:
             import_minecraft_instance(instance_name)
     def launch():
-        os.system(file_path, "--launch", "MSMP")
+        os.system(file_path + " --launch " + "MSMP")
 
     button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn)
     button1.grid(column=3, row=10)
