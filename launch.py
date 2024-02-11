@@ -10,6 +10,8 @@ import platform
 import shutil
 import threading  # Import the threading module
 
+window.after(201, lambda :root.iconbitmap(''))
+
 if platform.system() == "Windows":
     window = customtkinter.CTk()
     window.title("MSMP")
