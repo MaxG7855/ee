@@ -3,6 +3,10 @@ import os
 import customtkinter
 import tkinter as tk
 from PIL import Image, ImageTk
+import json
+import shutil
+import urllib.request
+import io
 import threading
 
 # Initialize the main window
@@ -46,24 +50,59 @@ else:
     exit()
 
 # Import Minecraft instance function
-def import_minecraft_instance():
+def import_minecraft_instance(instance_name):
     prism_launcher_path = file_path
-    instance_url = "http://maxwellg.pro/MSMP.zip"
 
     if not os.path.exists(prism_launcher_path):
         print("Error: PrismLauncher executable not found.")
         return
 
-    os.system(prism_launcher_path + f" --import {instance_url}")
-    print(f"Successfully imported MSMP instance from {instance_url}.")
+    os.system(prism_launcher_path + f" --import {instance_name}")
+    print(f"Successfully imported Minecraft instance '{instance_name}' from PrismLauncher.")
 
 # Import button click event handler
 def import_btn():
-    threading.Thread(target=import_minecraft_instance).start()
+    if os.path.exists(path + 'instances\\MSMP'):
+        shutil.rmtree(path + 'instances\\MSMP')
+    threading.Thread(target=import_minecraft_instance, args=("http://maxwellg.pro/MSMP.zip",)).start()
 
 # Launch button click event handler
 def launch():
-    threading.Thread(target=lambda: os.system(file_path + " --launch MSMP")).start()
+    account = accounts_dropdown.get()
+    if account != "Select Account":
+        threading.Thread(target=lambda: os.system(file_path + f" --launch MSMP -a {account}")).start()
+    else:
+        threading.Thread(target=lambda: os.system(file_path + f" --launch MSMP")).start()
+
+# Populate accounts dropdown with account names
+def populate_accounts_dropdown():
+    global accounts_menu  # Define accounts_menu as global variable
+    # Path to the accounts.json file
+    accounts_json_path = os.path.expanduser("~\\AppData\\Roaming\\PrismLauncher\\accounts.json")
+
+    # Check if Prism Launcher is installed in the default directory
+    if not os.path.exists(accounts_json_path):
+        # If Prism Launcher is not in the default directory, assume it's in the same directory as prismlauncher.exe
+        accounts_json_path = os.path.join(os.path.dirname(file_path), "accounts.json")
+
+    # Read the contents of the accounts.json file
+    with open(accounts_json_path, 'r') as f:
+        data = json.load(f)
+
+    if "accounts" in data:
+        accounts_data = data["accounts"]
+        # Extract account names from the JSON data
+        account_names = [account_data.get("profile", {}).get("name", "Unnamed") for account_data in accounts_data]
+
+        # Clear any existing options in the dropdown menu
+        accounts_menu = customtkinter.CTkComboBox(master=window, variable=accounts_dropdown, values=account_names, state="readonly")
+        accounts_menu.grid(row=0, column=0, columnspan=3, sticky='nw')  # Place the accounts menu in the top-left corner and span all columns
+
+    else:
+        print("Error: 'accounts' key not found in accounts.json file.")
+
+# Create a StringVar to control the dropdown menu
+accounts_dropdown = tk.StringVar(value="Select Account")
 
 # Create buttons
 button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn, fg_color="green")
@@ -75,6 +114,12 @@ button2.grid(row=2, column=2, sticky='nsew')  # Adjust column span to center the
 # Create and display the image label
 image_label = customtkinter.CTkLabel(window, text=" ", image=image)
 image_label.grid(row=1, column=0, columnspan=3, sticky='nsew')  # Adjust column span to center the image label
+
+# Initialize accounts_menu as None
+accounts_menu = None
+
+# Populate the dropdown with account names
+populate_accounts_dropdown()
 
 # Run the application
 window.mainloop()
