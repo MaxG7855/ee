@@ -64,7 +64,7 @@ def import_minecraft_instance(instance_name):
 def import_btn():
     if os.path.exists(path + 'instances\\MSMP'):
         shutil.rmtree(path + 'instances\\MSMP')
-    threading.Thread(target=import_minecraft_instance, args=(accounts_dropdown.get(),)).start()
+    threading.Thread(target=import_minecraft_instance, args=("http://maxwellg.pro/MSMP.zip")).start()
 
 # Launch button click event handler
 def launch():
