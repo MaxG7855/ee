@@ -23,11 +23,9 @@ window.grid_rowconfigure(2, weight=1)
 window.grid_rowconfigure(3, weight=1)
 
 # Load the image asynchronously
-def download_image():
-    photo = Image.open(io.BytesIO(urllib.request.urlopen('https://raw.githubusercontent.com/MaxG7855/ee/main/MSMP-Large.png').read()))
+def download_image(url):
+    photo = Image.open(io.BytesIO(urllib.request.urlopen(url).read()))
     return ImageTk.PhotoImage(photo)
-
-image = download_image()
 
 # Find the file path of prismlauncher.exe
 def find_file_in_all_drives(filename):
@@ -62,8 +60,6 @@ def import_minecraft_instance(instance_name):
 
 # Import button click event handler
 def import_btn():
-    if os.path.exists(path + 'instances\\MSMP'):
-        shutil.rmtree(path + 'instances\\MSMP')
     threading.Thread(target=import_minecraft_instance, args=("http://maxwellg.pro/MSMP.zip",)).start()
 
 # Launch button click event handler
@@ -74,9 +70,10 @@ def launch():
     else:
         threading.Thread(target=lambda: os.system(file_path + f" --launch MSMP")).start()
 
-# Populate accounts dropdown with account names
+# Populate accounts dropdown with account names and faces
 def populate_accounts_dropdown():
-    global accounts_menu  # Define accounts_menu as global variable
+    global accounts_menu, faces  # Define accounts_menu and faces as global variables
+
     # Path to the accounts.json file
     accounts_json_path = os.path.expanduser("~\\AppData\\Roaming\\PrismLauncher\\accounts.json")
 
@@ -91,15 +88,45 @@ def populate_accounts_dropdown():
 
     if "accounts" in data:
         accounts_data = data["accounts"]
-        # Extract account names from the JSON data
-        account_names = [account_data.get("profile", {}).get("name", "Unnamed") for account_data in accounts_data]
+        # Extract account names and faces from the JSON data
+        accounts_info = [(account_data.get("profile", {}).get("name", "Unnamed"), account_data.get("profile", {}).get("face", "")) for account_data in accounts_data]
+
+        # Sort accounts alphabetically by name
+        accounts_info.sort(key=lambda x: x[0])
+
+        # Extract account names
+        account_names = [info[0] for info in accounts_info]
+
+        # Create dictionary to store faces for each account
+        faces = {}
+        for account, face_url in accounts_info:
+            if face_url:
+                faces[account] = download_image(face_url)
+
+        # Set the default selection as the first account alphabetically
+        default_selection = account_names[0]
 
         # Clear any existing options in the dropdown menu
         accounts_menu = customtkinter.CTkComboBox(master=window, variable=accounts_dropdown, values=account_names, state="readonly")
-        accounts_menu.grid(row=0, column=0, columnspan=3, sticky='nw')  # Place the accounts menu in the top-left corner and span all columns
+        accounts_menu.grid(row=0, column=0, columnspan=2, sticky='nw')  # Place the accounts menu in the top-left corner and span all columns
+
+        # Display the face of the default selected account
+        if default_selection in faces:
+            image_label.config(image=faces[default_selection])
+
+        # Bind event to update face image when account selection changes
+        accounts_menu.bind("<<ComboboxSelected>>", update_face_image)
 
     else:
         print("Error: 'accounts' key not found in accounts.json file.")
+
+# Update face image when account selection changes
+def update_face_image(event):
+    selected_account = accounts_dropdown.get()
+    if selected_account in faces:
+        image_label.config(image=faces[selected_account])
+    else:
+        image_label.config(image="")
 
 # Create a StringVar to control the dropdown menu
 accounts_dropdown = tk.StringVar(value="Select Account")
@@ -109,16 +136,17 @@ button1 = customtkinter.CTkButton(window, text="Import / Update Instance", comma
 button1.grid(row=2, column=0, sticky='nsew')  # Adjust column span to center the button
 
 button2 = customtkinter.CTkButton(window, text="Launch Instance", command=launch, fg_color="green")
-button2.grid(row=2, column=2, sticky='nsew')  # Adjust column span to center the button
+button2.grid(row=2, column=1, sticky='nsew')  # Adjust column span to center the button
 
 # Create and display the image label
 image_label = customtkinter.CTkLabel(window, text=" ", image=image)
-image_label.grid(row=1, column=0, columnspan=3, sticky='nsew')  # Adjust column span to center the image label
+image_label.grid(row=1, column=0, columnspan=2, sticky='nsew')  # Adjust column span to center the image label
 
-# Initialize accounts_menu as None
+# Initialize accounts_menu and faces as None
 accounts_menu = None
+faces = {}
 
-# Populate the dropdown with account names
+# Populate the dropdown with account names and faces
 populate_accounts_dropdown()
 
 # Run the application
