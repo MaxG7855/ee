@@ -81,6 +81,49 @@ def launch():
     else:
         threading.Thread(target=lambda: os.system(file_path + f" --launch MSMP")).start()
 
+# Populate accounts dropdown with account names
+def populate_accounts_dropdown():
+    global accounts_menu, account_faces  # Define accounts_menu and account_faces as global variables
+    # Path to the accounts.json file
+    accounts_json_path = os.path.expanduser("~\\AppData\\Roaming\\PrismLauncher\\accounts.json")
+
+    # Check if Prism Launcher is installed in the default directory
+    if not os.path.exists(accounts_json_path):
+        # If Prism Launcher is not in the default directory, assume it's in the same directory as prismlauncher.exe
+        accounts_json_path = os.path.join(os.path.dirname(file_path), "accounts.json")
+
+    # Read the contents of the accounts.json file
+    with open(accounts_json_path, 'r') as f:
+        data = json.load(f)
+
+    if "accounts" in data:
+        accounts_data = data["accounts"]
+        # Extract account names from the JSON data
+        account_names = sorted([account_data.get("profile", {}).get("name", "Unnamed") for account_data in accounts_data])
+        
+        # Choose the first account alphabetically
+        default_account = account_names[0] if account_names else "Select Account"
+
+        # Clear any existing options in the dropdown menu
+        accounts_menu = customtkinter.CTkComboBox(master=window, variable=accounts_dropdown, values=account_names, state="readonly")
+        accounts_menu.grid(row=0, column=0, columnspan=3, sticky='nw')  # Place the accounts menu in the top-left corner and span all columns
+
+        # Load account faces
+        account_faces = {}
+        for account_data in accounts_data:
+            profile = account_data.get("profile", {})
+            name = profile.get("name", "Unnamed")
+            face_url = profile.get("avatarUrl")
+            if face_url:
+                face = download_image(face_url)
+                account_faces[name] = face
+
+    else:
+        print("Error: 'accounts' key not found in accounts.json file.")
+
+# Create a StringVar to control the dropdown menu
+accounts_dropdown = tk.StringVar()
+
 # Create buttons
 button1 = customtkinter.CTkButton(window, text="Import / Update Instance", command=import_btn, fg_color="green")
 button1.grid(row=2, column=0, sticky='nsew')  # Adjust column span to center the button
@@ -91,6 +134,13 @@ button2.grid(row=2, column=2, sticky='nsew')  # Adjust column span to center the
 # Create and display the image label
 image_label = customtkinter.CTkLabel(window, text=" ", image=image)
 image_label.grid(row=1, column=0, columnspan=3, sticky='nsew')  # Adjust column span to center the image label
+
+# Initialize accounts_menu and account_faces as None
+accounts_menu = None
+account_faces = {}
+
+# Populate the dropdown with account names and load account faces
+populate_accounts_dropdown()
 
 # Run the application
 window.mainloop()
