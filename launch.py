@@ -64,7 +64,7 @@ def import_minecraft_instance():
         print("Error: PrismLauncher executable not found.")
         return
 
-    os.system(prism_launcher_path + f" --import http://maxwellg.pro/MSMP.zip")
+    os.system(prism_launcher_path + f" --import https://maxwellg.pro/MSMP.zip")
     print("Successfully imported Minecraft instance from PrismLauncher.")
 
 # Import button click event handler
